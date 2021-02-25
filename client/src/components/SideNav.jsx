@@ -19,24 +19,26 @@ const SideNav = () => {
   const { register, handleSubmit } = useForm()
   const { register: registerDirector, handleSubmit: handleSubmitDirecter } = useForm()
 
-  const onSubmitMovie = ({ movieName, movieGenre, directerId }) => {
+  const onSubmitMovie = ({ movieName, movieGenre, directorId }, e) => {
     addMovie({
         variables: {
         name: movieName,
         genre: movieGenre,
-        directerId
+        directorId
       }
     })
+    e.target.reset()
   }
 
-  const onSubmitDirector = ({ directerName, directerAge }) => {
-    const IntAge = parseInt(directerAge)
+  const onSubmitDirector = ({ directorName, directorAge }, e) => {
+    const IntAge = parseInt(directorAge)
     addDirecter({
       variables: {
-        name: directerName,
+        name: directorName,
         age: IntAge,
       }
     })
+    e.target.reset()
   }
 
   return (
@@ -49,13 +51,13 @@ const SideNav = () => {
           <Form onSubmit={handleSubmitDirecter(onSubmitDirector)}>
             <FormGroup>
               <input
-                className="form-control" type="text" name="directerName"
+                className="form-control" type="text" name="directorName"
                 placeholder="監督名" ref={registerDirector}
               />
             </FormGroup>
             <FormGroup>
               <input
-                className="form-control" type="number" name="directerAge"
+                className="form-control" type="number" name="directorAge"
                 placeholder="年齢" ref={registerDirector}
               />
             </FormGroup>
@@ -85,8 +87,8 @@ const SideNav = () => {
             </FormGroup>
             <FormGroup>
               <select
-                className="form-control" type="select" name="directerId"
-                id="directerId" ref={register}
+                className="form-control" type="select" name="directorId"
+                ref={register}
               >
                 {data && data.directors.map(({id, name}) => (
                   <option key={id} value={id}>{name}</option>

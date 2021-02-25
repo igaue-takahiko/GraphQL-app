@@ -8,6 +8,7 @@ export const MOVIE_LIST = gql`
       genre
       director {
         name
+        age
       }
     }
   }
@@ -36,6 +37,14 @@ export const ADD_DIRECTOR = gql`
     addDirector(name: $name, age: $age) {
       name
       age
+    }
+  }
+`;
+
+export const DELETE_MOVIE = gql`
+  mutation($id: ID!) {
+    deleteMovie(id: $id) {
+      id
     }
   }
 `;
