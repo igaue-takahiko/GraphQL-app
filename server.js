@@ -2,15 +2,14 @@ const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const scheme = require("./server/schema/schema");
+const rootScheme = require("./server/schema/schema");
 
 const app = express();
-// app.use(express.json())
 app.use(cors());
 app.use(
   "/graphql",
   graphqlHTTP({
-    scheme,
+    schema: rootScheme,
     graphiql: true,
   })
 );
@@ -28,11 +27,11 @@ mongoose.connect(
     }
   }
 );
-mongoose.connection.once('open', () => {
+mongoose.connection.once("open", () => {
   console.log("connected to mongoDB.");
-})
+});
 
-const PORT = 7000 || 7000;
+const PORT = "7000" || 7000;
 app.listen(PORT, () => {
   console.log("listening port", PORT);
 });

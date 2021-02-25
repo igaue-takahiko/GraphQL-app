@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const directerSchema = new Schema(
+const directorSchema = new Schema(
   {
     name: String,
     age: Number,
@@ -12,4 +12,4 @@ const directerSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Directer", directerSchema);
+module.exports = mongoose.model("Director", directorSchema);

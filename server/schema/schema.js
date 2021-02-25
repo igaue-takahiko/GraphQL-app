@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 const Movie = require("../models/moviesModel");
-const Directer = require("../models/directerModel");
+const Director = require("../models/directorModel");
 
 const {
   GraphQLObjectType,
@@ -18,17 +18,17 @@ const MovieType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     genre: { type: GraphQLString },
-    directer: {
-      type: DirecterType,
+    director: {
+      type: DirectorType,
       resolve(parent, args) {
-        return Directer.findById(parent.directerId);
+        return Director.findById(parent.directorId);
       },
     },
   }),
 });
 
-const DirecterType = new GraphQLObjectType({
-  name: "Directer",
+const DirectorType = new GraphQLObjectType({
+  name: "Director",
   fields: () => ({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
@@ -36,7 +36,7 @@ const DirecterType = new GraphQLObjectType({
     movies: {
       type: new GraphQLList(MovieType),
       resolve(parent, args) {
-        return Movie.find({ directerId: parent.id });
+        return Movie.find({ directorId: parent.id });
       },
     },
   }),
@@ -52,11 +52,11 @@ const RootQuery = new GraphQLObjectType({
         return Movie.findById(args.id);
       },
     },
-    directer: {
-      type: DirecterType,
+    director: {
+      type: DirectorType,
       args: { id: { type: GraphQLID } },
       resolve(parents, args) {
-        return Directer.findById(args.id);
+        return Director.findById(args.id);
       },
     },
     movies: {
@@ -65,10 +65,10 @@ const RootQuery = new GraphQLObjectType({
         return Movie.find({});
       },
     },
-    directers: {
-      type: new GraphQLList(DirecterType),
+    directors: {
+      type: new GraphQLList(DirectorType),
       resolve(parent, args) {
-        return Directer.find({});
+        return Director.find({});
       },
     },
   },
@@ -82,31 +82,31 @@ const Mutation = new GraphQLObjectType({
       args: {
         name: { type: GraphQLString },
         genre: { type: GraphQLString },
-        directerId: { type: GraphQLID },
+        directorId: { type: GraphQLID },
       },
       resolve(parent, args) {
         let movie = new Movie({
           name: args.name,
           genre: args.genre,
-          directerId: args.directerId,
+          directorId: args.directorId,
         });
 
         return movie.save();
       },
     },
-    addDirecter: {
-      type: DirecterType,
+    addDirector: {
+      type: DirectorType,
       args: {
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
       },
       resolve(parent, args) {
-        let directer = new Directer({
+        let director = new Director({
           name: args.name,
           age: args.age,
         });
 
-        return directer.save();
+        return director.save();
       },
     },
     updateMovie: {
@@ -115,30 +115,30 @@ const Mutation = new GraphQLObjectType({
         id: { type: GraphQLNonNull(GraphQLID) },
         name: { type: GraphQLString },
         genre: { type: GraphQLString },
-        directerId: { type: GraphQLID },
+        directorId: { type: GraphQLID },
       },
       resolve(parent, args) {
         let updateMovie = {};
         args.name && (updateMovie.name = args.name);
         args.genre && (updateMovie.genre = args.genre);
-        args.directerId && (updateMovie.directerId = args.directerId);
-        return Directer.findByIdAndUpdate(args.id, updateMovie, {
+        args.directorId && (updateMovie.directorId = args.directorId);
+        return Director.findByIdAndUpdate(args.id, updateMovie, {
           new: true,
         });
       },
     },
-    updateDirecter: {
-      type: DirecterType,
+    updateDirector: {
+      type: DirectorType,
       args: {
         id: { type: GraphQLNonNull(GraphQLID) },
         name: { type: GraphQLString },
         age: { type: GraphQLInt },
       },
       resolve(parent, args) {
-        let updateDirecter = {};
-        args.name && (updateDirecter.name = args.name);
-        args.age && (updateDirecter.age = args.age);
-        return Directer.findByIdAndUpdate(args.id, updateDirecter, {
+        let updateDirector = {};
+        args.name && (updateDirector.name = args.name);
+        args.age && (updateDirector.age = args.age);
+        return Director.findByIdAndUpdate(args.id, updateDirector, {
           new: true,
         });
       },
@@ -152,13 +152,13 @@ const Mutation = new GraphQLObjectType({
         return Movie.findByIdAndRemove(args.id);
       },
     },
-    deleteDirecter: {
-      type: DirecterType,
+    deleteDirector: {
+      type: DirectorType,
       args: {
         id: { type: GraphQLNonNull(GraphQLID) },
       },
       resolve(parent, args) {
-        return Directer.findByIdAndRemove(args.id);
+        return Director.findByIdAndRemove(args.id);
       },
     },
   },
